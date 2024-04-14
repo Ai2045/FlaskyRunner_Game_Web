@@ -4,28 +4,45 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Merge TailwindCSS into Flask app</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body>
-    <div class="container mx-auto">
-        <div class="flex justify-center items-center h-screen">
-            <div class="w-full max"></div>
-            <div class="bg-white p-8 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-bold text-center">Login</h2>
-                <form action="{{url_for('login')}}" method="POST">
-                    <div class="mb-4">
-                        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                        <input type="text" name="username" id="username" class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+
+<body class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+    <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+        <div class="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
+            <div class="max-w-md mx-auto">
+                <div class="flex items-center space-x-5">
+                    <div class="h-14 w-14 bg-blue-500 rounded-full flex flex-shrink-0 justify-center items-center text-white text-2xl font-mono">
+                        F
                     </div>
-                    <div class="mb-4">
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <input type="password" name="password" id="password" class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <div class="block pl-2 font-semibold text-xl self-start text-gray-700">
+                        <h2 class="leading-relaxed">Login al gioco</h2>
+                        <p class="text-sm text-gray-500 font-normal leading-relaxed">Inserisci le tue credenziali di accesso.</p>
                     </div>
-                    <div class="mb-4">
-                        <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Login</button>
+                </div>
+                <form action="/login" method="post">
+                    <div class="divide-y divide-gray-200">
+                        <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+                            <div class="flex flex-col">
+                                <label class="leading-loose">User Name</label>
+                                <input type="text" name="username" class="p-4 border-2 border-gray-500 rounded-lg" placeholder="Name">
+                            </div>
+                            <div class="flex flex-col">
+                                <label class="leading-loose">Password</label>
+                                <input type="password" name="password" class="p-4 border-2 border-gray-500 rounded-lg" placeholder="Password">
+                            </div>
+                        </div>
+                        <div class="pt-4 flex items-center space-x-4">
+                            <button class="flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none bg-blue-500">
+                                Login
+                            </button>
+                        </div>
                     </div>
                 </form>
-
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
