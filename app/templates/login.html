@@ -21,22 +21,29 @@
                         <p class="text-sm text-gray-500 font-normal leading-relaxed">Inserisci le tue credenziali di accesso.</p>
                     </div>
                 </div>
-                <form action="/login" method="post">
+                <form class="login-form" action="/login" method="post" >
                     <div class="divide-y divide-gray-200">
                         <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
                             <div class="flex flex-col">
                                 <label class="leading-loose">User Name</label>
                                 <input type="text" name="username" class="p-4 border-2 border-gray-500 rounded-lg" placeholder="Name">
+                                {% if error.username %}
+                                <p class="error text-red-500 text-xs italic">{{ error.username }}</p>
+                                {% endif %}
                             </div>
                             <div class="flex flex-col">
                                 <label class="leading-loose">Password</label>
                                 <input type="password" name="password" class="p-4 border-2 border-gray-500 rounded-lg" placeholder="Password">
+                                {% if error.password %}
+                                <p class="error text-red-500 text-xs italic">{{ error.password }}</p>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="pt-4 flex items-center space-x-4">
-                            <button class="flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none bg-blue-500">
+                            <button class="flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none bg-blue-500" >
                                 Login
                             </button>
+                            <a class="flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none bg-blue-500" href="/register">Register</a>
                         </div>
                     </div>
                 </form>
@@ -45,4 +52,14 @@
     </div>
 </body>
 
+<script>
+    // Check if an error exists
+    var errorElement = document.getElementById('error');
+    if (errorElement) {
+        // Start a timer to hide the error after 10 seconds
+        setTimeout(function() {
+            errorElement.style.display = 'none';
+        }, 10000);  // 10000 milliseconds equals 10 seconds
+    }
+</script>
 </html>
