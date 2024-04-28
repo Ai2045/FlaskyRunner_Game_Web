@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, abort, session
 from app import app, db
 from werkzeug.security import generate_password_hash, check_password_hash
+
 from app.models.db import Users, Scores
 
 
@@ -42,12 +43,24 @@ def setup_routes(app):
             if check_form_empty(username, password):
                 error["username"] = "Username and password cannot be empty"
                 return render_template('register.html', error=error)
+            if Users.query.filter_by(username=username).first():
+                error["username"] = "Username already exists"
+                return render_template('register.html', error=error)
             hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
             user = Users(username=username, password=hashed_password)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('login'))
         return render_template('register.html', error=error)
+    @app.route('/game')
+    def game():
+            return render_template('game.html')
+    
+    @app.route('/get_user_name', methods=['GET'])
+    def get_user_name():
+        if 'username' in session:
+            return session['username']
+        abort(404)
     
 def check_form_empty(username, password):
     if username == "" or password == "":
@@ -57,6 +70,8 @@ def check_form_empty(username, password):
 
 def validate_user(username, password):
     user = Users.query.filter_by(username=username).first()
+    print(user.password, password)
+    print(check_password_hash(user.password, password))
     if user and check_password_hash(user.password, password):
         return True
     return False
