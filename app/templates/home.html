@@ -1,25 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Down Shooter - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.9/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Aggiunta di regole CSS custom per animazioni, ombre e sfondi trasparenti */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .custom-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        .backdrop {
+            /* Stili esistenti */
+            display: flex;
+            width: 100%; /* Impostato per coprire la larghezza piena del coprigioco */
+            height: auto; /* Altezza automatica basata sul contenuto */
+            backdrop-filter: blur(5px); /* Assicurati che questo stile sia applicato al backdrop per un effetto sfocato */
+        }
+        
+        /* Nuovo stile per la classifica posizionata in maniera assoluta */
+        .ranking {
+            position: absolute;
+            top: 0; /* Allineato con il top del coprigioco */
+            right: 0; /* Allineato con il destro del coprigioco */
+            width: 320px; /* Larghezza fissa della classifica */
+            z-index: 50; /* Assicura soprapposizione su altri elementi se necessario */
+            margin-top: 4rem; /* Regola questa misura per allineare verticalmente con il tuo coprigioco */
+        }
+
+        /* Effetto luce sfumata che si propaga dal centro della pagina */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200%; /* La dimensione qui può essere regolata in base alla propagazione della luce desiderata */
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
+            z-index: 0;
+            pointer-events: none; /* Permette clic e interazioni attraverso l'effetto */
+        }
+        
+        /* Regolazione del layout di classifica */
+        .ranking-container {
+            max-width: 320px; /* Riduce la larghezza della classifica */
+            margin-top: 4rem; /* Regolazione dello spazio superiore rispetto al copertina di gioco */
+            margin-right: 1rem; /* Lascia spazio a destra se necessario */
+        }
+    </style>
 </head>
+<body class="bg-gray-900 text-white h-screen relative">
 
-<body class="bg-gray-100 antialiased">
-  <div class="container mx-auto py-8">
-    <h1 class="text-5xl font-bold text-center text-blue-500 mb-8">Home</h1>
-    {% if session['username'] %}
-      <h2 class="text-xl text-center mb-4">Welcome {{ session['username'] }}</h2>
-    {% endif %}
-    <div class="space-y-4 text-center">
-      <a href="/login" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Login</a>
-      <a href="/register" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Register</a>
-      <a href="/logout" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Logout</a>
-    </div>
+    <!-- Navbar con animazione Fade-In e Shadow -->
+    <nav class="p-4 flex justify-between items-center shadow-xl fade-in">
+        <div class="flex items-center space-x-2">
+            <img src="static/imgs/logo.png" class="h-12" alt="Game logo">
+            <span class="text-xl font-semibold">Top Down Shooter</span>
+        </div>
+        <div class="flex space-x-4">
+            {% if username == null or username.startswith('guest') %}
+
+            <a href="/login" class="px-3 py-2 bg-blue-500 rounded hover:bg-blue-600 transition duration-300 ease-in-out">Login</a>
+            <a href="/register" class="px-3 py-2 bg-blue-500 rounded hover:bg-blue-600 transition duration-300 ease-in-out">Register</a>
+            {% else %}
+            <a href="/logout"class="px-3 py-2 bg-blue-500 rounded hover:bg-blue-600 transition duration-300 ease-in-out">Logout</a>
+            {% endif %}
+            
+        </div>
+    </nav>
+
+    <header class="flex flex-col items-center justify-center h-full space-y-6 relative fade-in">
+      <!-- Sfondo leggermente trasparente per rendere leggibili le scritte -->
+      <div class="text-center absolute z-10 w-full backdrop-filter bg-opacity-50 bg-gray-900 p-5 rounded">
+          <h1 class="text-6xl font-bold mb-4">Survive the Invasion!</h1>
+          <p class="max-w-lg mx-auto">Join the battle, defeat the zombie hordes, and save humanity!</p>
+      </div>
+      <img src="static/imgs/game_cover.png" class="w-full h-auto max-w-4xl rounded-lg custom-shadow" alt="Game scene">
+      <!-- Pulsante e logica Utente -->
+      {{ username }}
+      {% if username == null or username.startswith('guest') %}
+      <a href="/play_guest" class="mt-4 px-5 py-3 bg-green-600 rounded hover:bg-green-700 transition duration-300 ease-in-out custom-shadow">Play as Guest</a>
+      {% else %}
+      <a href="/play_game" class="mt-4 px-5 py-3 bg-green-600 rounded hover:bg-green-700 transition duration-300 ease-in-out custom-shadow">Enter the Arena</a>
+      {% endif %}
+  </header>
+
+ <!-- Sezione Classifica allineata con il copertina di gioco e riduzione dimensione -->
+ <div class="container mx-auto py-8 relative z-10">
+  <div class="flex justify-end">
+    <div class="ranking bg-gray-800 bg-opacity-80 p-5 rounded shadow-xl">
+      <h2 class="text-lg font-bold mb-3">Rankings</h2>
+      <!-- I campi della classifica popolati qui -->
   </div>
-</body>
+  </div>
+</div>
 
+    <!-- Footer con Shadow -->
+    <footer class="text-center text-gray-600 py-4 shadow-xl fade-in">
+        <p>&copy; 2024 Top Down Shooter Game. All rights reserved.</p>
+    </footer>
+
+    <script src="{{url_for('static', filename='Ranking_table.js')}}"></script>
+</body>
 </html>

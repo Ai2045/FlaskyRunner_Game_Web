@@ -1,19 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.9/dist/tailwind.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='game.css') }}" rel="stylesheet">
+    <meta charset="utf-8" />
+    <!-- Aggiungi il tuo favicon personalizzato qui -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <title>Gioco Zombie Apocalisse</title>
   </head>
-  <body>
-    <div class="game">
-      <div id="dino"></div>
-      <div id="cactus"></div>
+  <body class="bg-gradient-to-r from-green-800 to-gray-900">
+    <script>
+        let username = "{{ username }}";
+    </script>
+    <nav class="absolute top-0 left-0 p-4">
+        <a href="/" class="text-white bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">
+            &#8962; Back to Home
+        </a>
+    </nav>
+    <div class="min-h-screen flex justify-center items-center">
+      <!-- Contenitore del titolo e del canvas -->
+      <div class="text-center">
+        <h1 class="text-4xl text-white font-bold mb-8">⚡️Survivor Zombie ⚡️</h1>
+        <!-- Qui si inserisce il canvas del gioco p5.js -->
+        <div id="game" class="inline-block relative"></div>
+        <!-- Alcuni elementi decorativi possono andare qui se necessari -->
+      </div>
     </div>
-    ciao
+    <!-- Footer con crediti o altre informazioni -->
+    <footer class="text-center text-white py-4">
+      <p>&copy; 2024 Zombie Game. Tutti i diritti riservati.</p>
+    </footer>
+    <script src="{{ url_for('static', filename='game_logic.js')}}"></script>
+    <script src="{{url_for('static', filename='Player.js')}}"></script>
+    <script src="{{url_for('static', filename='Zombie.js')}}"></script>
+    <script src="{{url_for('static', filename='Bullet.js')}}"></script>
+    <script src="{{url_for('static', filename='Particle.js')}}"></script>
   </body>
-  <link href="{{ url_for('static', filename='game.css') }}" rel="stylesheet">
-  <script src="{{ url_for('static', filename='game_logic.js')}}"></script>
 </html>
