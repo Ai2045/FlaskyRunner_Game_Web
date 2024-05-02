@@ -1,4 +1,5 @@
 from app import db
+import datetime
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -12,6 +13,7 @@ class Scores(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
     score = db.Column(db.Integer)
+    date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __repr__(self):
         return '<Score %r>' % self.score

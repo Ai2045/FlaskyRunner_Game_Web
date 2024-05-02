@@ -9,8 +9,12 @@ def setup_routes(app):
     @app.route('/')
     def home():
         if 'username' in session:
-            return render_template('home.html', username=session['username'])
-        return render_template('home.html', username=None)
+            if session['username'].startswith('guest_'):
+                session['is_guest'] = True
+            else:
+                session['is_guest'] = False
+            return render_template('home.html', username=session['username'], is_guest=session['is_guest'])
+        return render_template('home.html', username=None, is_guest=session.get('is_guest', True))
     
     @app.route('/login', methods=['GET', 'POST'])
     def login():
@@ -23,7 +27,7 @@ def setup_routes(app):
                 
             if validate_user(request.form['username'], request.form['password']):
                 session['username'] = request.form['username']
-                print(session['username'])
+                session['is_guest'] = False
                 return redirect(url_for('home'))
             else:
                 error["username"] = "Invalid username or password"
@@ -33,6 +37,7 @@ def setup_routes(app):
     @app.route('/logout')
     def logout():
         session.pop('username', None)
+        session.pop('is_guest', None)
         return redirect(url_for('home'))
     
     @app.route('/register', methods=['GET', 'POST'])
@@ -114,6 +119,25 @@ def setup_routes(app):
             if highest_score is not None:
                 user_high_scores.append({"username": username, "score": highest_score.score})
         return jsonify(user_high_scores)
+        abort(404)
+
+    @app.route('/filter_players')
+    def filter_players():
+        search_term = request.args.get('searchTerm')
+        filtered_players = Users.query.filter(Users.username.ilike(f"%{search_term}%")).all()
+        print(filtered_players)
+        return jsonify([user.username for user in filtered_players])
+    
+    @app.route('/profile/<username>')
+    def profile(username):
+        user = Users.query.filter_by(username=username).first()
+        if user:
+            user_id = user.id
+            scores = Scores.query.filter_by(user_id=user_id).all()
+            if not scores:
+                return render_template('profile.html', username=username, scores=None, highest_score=None)
+            highest_score = Scores.query.filter_by(user_id=user_id).order_by(Scores.score.desc()).first()
+            return render_template('profile.html', username=username, scores=scores, highest_score=highest_score.score)
         abort(404)
 
 def check_form_empty(username, password):

@@ -1,0 +1,111 @@
+        /* Aggiunta di regole CSS custom per animazioni, ombre e sfondi trasparenti */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .custom-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        #suggestions {
+            display: none; /* Nascondi all'inizio */
+            position: absolute; /* Assicurati che sia positivo rispetto al campo di input */
+            width: 100%; /* Stessa larghezza dell'input */
+            max-height: 50vh; /* Limita l'altezza e usa lo scroll se necessario */
+            overflow-y: auto;
+            z-index: 1000; /* Assicurati che sia sopra gli altri elementi */
+        }
+
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .suggestion-item:hover {
+            background-color: #eee;
+        }
+
+        .backdrop {
+            /* Stili esistenti */
+            display: flex;
+            width: 100%; /* Impostato per coprire la larghezza piena del coprigioco */
+            height: auto; /* Altezza automatica basata sul contenuto */
+            backdrop-filter: blur(5px); /* Assicurati che questo stile sia applicato al backdrop per un effetto sfocato */
+        }
+        
+
+        /* Effetto luce sfumata che si propaga dal centro della pagina */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%; /* La dimensione qui può essere regolata in base alla propagazione della luce desiderata */
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
+            z-index: 0;
+            pointer-events: none; /* Permette clic e interazioni attraverso l'effetto */
+        }
+        
+
+        .search-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10; /* Assicura che la barra di ricerca rimanga sopra gli altri elementi */
+            margin-top: 1rem; /* Adegua in base alle necessità */
+        }
+
+        /* Aggiornato per spostare la classifica in basso a destra */
+        .ranking {
+            position: absolute;
+            top: 100px; /* Ora allineato al fondo del coprigioco */
+            right: 15px; /* Allineato con il destro del coprigioco */
+            width: 350px; /* Larghezza fissa della classifica */
+            z-index: 50; /* Assicura soprapposizione su altri elementi se necessario */
+            margin: 1rem; /* Distanza dai bordi della finestra */
+        }
+
+        /* Cambia il background della barra di ricerca */
+#search-player {
+    background-color: #222222; /* Sostituisci con il colore desiderato */
+    color: #ffffff; /* Cambia il colore del testo se necessario */
+    transition: background-color 0.3s ease; /* Transizione fluida del colore di sfondo */
+}
+
+#search-player:focus {
+    background-color: #333333; /* Colore di sfondo al focus */
+}
+
+/* Aggiunge animazioni al passaggio del mouse per il cover e la classifica */
+img.custom-shadow, .ranking {
+    transition: transform 0.3s ease; /* Animazione fluida */
+}
+
+img.custom-shadow:hover, .ranking:hover {
+    transform: scale(1.05); /* Effetto di ingrandimento */
+    cursor: pointer; /* Cambia il cursore in un puntatore */
+}
+
+/* Aggiunta di stili per il testo di benvenuto */
+.greeting-text {
+    font-size: 2rem; /* Dimensione del testo */
+    font-weight: 600; /* Grassetto */
+}
+
+.text-style {
+    color: aquamarine;
+    text-shadow: 2px 2px 4px rgba(9, 232, 39, 0.5); /* Ombra del testo */
+}
+#main-section {
+    min-height: calc(100vh - 80px); /* Altezza minima per coprire l'intera finestra */
+    padding-top: 80px; /* Spazio sopra il contenuto per la barra di navigazione */
+}

@@ -4,6 +4,8 @@ class Player {
       this.angle = 0;
       this.bullets = [];
       this.particles = [];
+      this.shoot_sound = loadSound('static/sounds/shoot.wav');
+      this.destroy_sound = loadSound('static/sounds/destroy.wav');
     }
     
     draw() {
@@ -78,12 +80,14 @@ class Player {
     
     shoot() {
       this.bullets.push(new Bullet(this.pos.x, this.pos.y, this.angle));
+      this.shoot_sound.play();
     }
     
     hasShot(zombie) {
       for (let i = 0; i < this.bullets.length; i++) {
         if (dist(this.bullets[i].x, this.bullets[i].y, zombie.pos.x, zombie.pos.y) < 15) {
           this.bullets.splice(i, 1);
+          this.destroy_sound.play();
           return true;
         }
       }

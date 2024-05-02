@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Profile</title>
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="{{url_for('static', filename='global.css')}}">
+    <!-- Google Fonts for fantasy-themed font -->
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white h-screen relative fade-in">
+
+    <nav class="absolute top-0 left-0 p-2">
+        <a href="/" class="text-white bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">
+            &#8962; Back to Home
+        </a>
+    </nav>
+
+    <div class="container w-3/4 mx-auto  mt-10 p-5 rounded shadow-lg  bg-opacity-50 bg-gray-500 ">
+        <div class="mb-6">
+            <h1 class="text-5xl font-bold mb-2  profile-heading py-2">Profile: {{username}}</h1>
+            <div id="profile-info" class="mb-4">
+                {% if scores %}
+                    <p class="text-black-600  text-3xl ">Highest Score: {{highest_score}}</p>
+                {% else %}
+                    <p class="text-black-600  text-3xl ">No games played yet</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="mb-6">
+            <h2 class="text-4xl font-bold mb-2 profile-heading text-white py-2">Historical Games</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full leading-normal shadow-lg rounded-lg overflow-hidden">
+                    <thead class="bg-gray-700 text-white">
+                        <tr>
+                            <th class="py-3 px-6 text-left">Date</th>
+                            <th class="py-3 px-6 text-center">Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historical-games" class="bg-gray-800 text-white">
+                        {% if not scores %}
+                            <tr>
+                                <td class="py-5 px-6 text-center" colspan="2">No games played yet</td>
+                            </tr>
+                        {% else %}
+                            <!-- Add rows dynamically here -->
+                            {% for score in scores %}
+                                <tr class="hover:bg-gray-700">
+                                    <td class="py-3 px-6 text-left border-b border-gray-700">{{ score.date }}</td>
+                                    <td class="py-3 px-6 text-center border-b border-gray-700">{{ score.score }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

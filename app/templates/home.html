@@ -5,60 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Top Down Shooter - Home</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.9/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        /* Aggiunta di regole CSS custom per animazioni, ombre e sfondi trasparenti */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .fade-in {
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        .custom-shadow {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-        }
-
-        .backdrop {
-            /* Stili esistenti */
-            display: flex;
-            width: 100%; /* Impostato per coprire la larghezza piena del coprigioco */
-            height: auto; /* Altezza automatica basata sul contenuto */
-            backdrop-filter: blur(5px); /* Assicurati che questo stile sia applicato al backdrop per un effetto sfocato */
-        }
-        
-        /* Nuovo stile per la classifica posizionata in maniera assoluta */
-        .ranking {
-            position: absolute;
-            top: 0; /* Allineato con il top del coprigioco */
-            right: 0; /* Allineato con il destro del coprigioco */
-            width: 320px; /* Larghezza fissa della classifica */
-            z-index: 50; /* Assicura soprapposizione su altri elementi se necessario */
-            margin-top: 4rem; /* Regola questa misura per allineare verticalmente con il tuo coprigioco */
-        }
-
-        /* Effetto luce sfumata che si propaga dal centro della pagina */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200%; /* La dimensione qui può essere regolata in base alla propagazione della luce desiderata */
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
-            z-index: 0;
-            pointer-events: none; /* Permette clic e interazioni attraverso l'effetto */
-        }
-        
-        /* Regolazione del layout di classifica */
-        .ranking-container {
-            max-width: 320px; /* Riduce la larghezza della classifica */
-            margin-top: 4rem; /* Regolazione dello spazio superiore rispetto al copertina di gioco */
-            margin-right: 1rem; /* Lascia spazio a destra se necessario */
-        }
-    </style>
+    <link rel="stylesheet" href="{{url_for('static', filename='global.css')}}">
 </head>
 <body class="bg-gray-900 text-white h-screen relative">
 
@@ -66,45 +13,71 @@
     <nav class="p-4 flex justify-between items-center shadow-xl fade-in">
         <div class="flex items-center space-x-2">
             <img src="static/imgs/logo.png" class="h-12" alt="Game logo">
-            <span class="text-xl font-semibold">Top Down Shooter</span>
+            <span class="text-xl font-semibold text-style">Top Down Shooter</span>
         </div>
         <div class="flex space-x-4">
-            {% if username == null or username.startswith('guest') %}
-
+            {% if is_guest %}
             <a href="/login" class="px-3 py-2 bg-blue-500 rounded hover:bg-blue-600 transition duration-300 ease-in-out">Login</a>
             <a href="/register" class="px-3 py-2 bg-blue-500 rounded hover:bg-blue-600 transition duration-300 ease-in-out">Register</a>
             {% else %}
-            <a href="/logout"class="px-3 py-2 bg-blue-500 rounded hover:bg-blue-600 transition duration-300 ease-in-out">Logout</a>
+            <a href="/logout" class="px-3 py-2 bg-blue-500 rounded hover:bg-blue-600 transition duration-300 ease-in-out">Logout</a>
             {% endif %}
-            
         </div>
     </nav>
 
-    <header class="flex flex-col items-center justify-center h-full space-y-6 relative fade-in">
-      <!-- Sfondo leggermente trasparente per rendere leggibili le scritte -->
-      <div class="text-center absolute z-10 w-full backdrop-filter bg-opacity-50 bg-gray-900 p-5 rounded">
-          <h1 class="text-6xl font-bold mb-4">Survive the Invasion!</h1>
-          <p class="max-w-lg mx-auto">Join the battle, defeat the zombie hordes, and save humanity!</p>
-      </div>
-      <img src="static/imgs/game_cover.png" class="w-full h-auto max-w-4xl rounded-lg custom-shadow" alt="Game scene">
-      <!-- Pulsante e logica Utente -->
-      {{ username }}
-      {% if username == null or username.startswith('guest') %}
-      <a href="/play_guest" class="mt-4 px-5 py-3 bg-green-600 rounded hover:bg-green-700 transition duration-300 ease-in-out custom-shadow">Play as Guest</a>
-      {% else %}
-      <a href="/play_game" class="mt-4 px-5 py-3 bg-green-600 rounded hover:bg-green-700 transition duration-300 ease-in-out custom-shadow">Enter the Arena</a>
-      {% endif %}
+    <div id="greeting" class=" text-style z-20 w-full p-10 ">
+        {% if not is_guest %}
+        <h2 class="greeting-text text-base sm:text-lg lg:text-2xl xl:text-3xl">Welcome back, {{ username }}!</h2>
+        {% else %}
+        <h2 class="greeting-text text-base sm:text-lg lg:text-2xl xl:text-3xl">Welcome to Top Down Shooter!</h2>
+        {% endif %}
+    </div>
+    
+<!-- Header -->
+<header id="main-section" class="flex flex-col items-center  h-full relative fade-in">
+
+    <!-- Backdrop -->
+    <div class="text-style text-center justify-center z-10 w-full sm:w-3/4 lg:w-2/3 xl:w-1/2 backdrop-filter bg-opacity-50 bg-gray-900 py-5 px-3  rounded ">
+      <h1 class="text-6xl font-bold mb-4">Survive the Invasion!</h1>
+      <p class="max-w-lg mx-auto">Join the battle, defeat the zombie hordes, and save humanity!</p>
+    </div>
+    
+    <!-- Copertina del Gioco -->
+    <div class="w-full flex justify-center mt-[-3rem] sm:mt-[-4rem] lg:mt-[-5rem] pt-3"> <!-- Adjust the negative margin to lift the cover up -->
+      <img src="static/imgs/game_cover.png" class="h-auto w-auto max-w-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl rounded-lg custom-shadow" alt="Game scene">
+    </div>
+    
+    <!-- Pulsante e Logica Utente -->
+    {% if is_guest %}
+    <a href="/play_guest" class="mt-4 px-5 py-3 bg-green-600 rounded hover:bg-green-700 transition duration-300 ease-in-out custom-shadow">Play as Guest</a>
+    {% else %}
+    <a href="/play_game" class="mt-4 px-5 py-3 bg-green-600 rounded hover:bg-green-700 transition duration-300 ease-in-out custom-shadow">Enter the Arena</a>
+    {% endif %}
+  
   </header>
 
- <!-- Sezione Classifica allineata con il copertina di gioco e riduzione dimensione -->
- <div class="container mx-auto py-8 relative z-10">
-  <div class="flex justify-end">
-    <div class="ranking bg-gray-800 bg-opacity-80 p-5 rounded shadow-xl">
-      <h2 class="text-lg font-bold mb-3">Rankings</h2>
-      <!-- I campi della classifica popolati qui -->
-  </div>
-  </div>
-</div>
+    <!-- Sezione Classifica allineata con il copertina di gioco e riduzione dimensione -->
+    <div class="ranking text-style bg-opacity-80 p-5 rounded shadow-xl absolute top-0 right-0 mt-16 mr-4 sm:mt-8 sm:mr-8 md:mt-12 md:mr-12 lg:static lg:mt-4 lg:mr-0">
+        <h2 class="text-lg font-bold mb-3">Rankings</h2>
+        <!-- Add a table here with tbody having the ID 'ranking-body' -->
+        <table class="w-full">
+            <thead>
+                <tr>
+                    <th class="border px-4 py-2">Posizione</th> <!-- Aggiunta colonna "Posizione" -->
+                    <th class="border px-4 py-2">Giocatore</th>
+                    <th class="border px-4 py-2">Punteggio</th>
+                </tr>
+            </thead>
+            <tbody id="ranking-body">
+                <!-- The fetched data rows will be appended here by your script -->
+            </tbody>
+        </table>
+        <!-- I campi della classifica popolati qui -->
+    </div>
+    <div class="search-container text-center my-4 w-full absolute top-0 left-1/2 transform -translate-x-1/2 md:relative md:w-auto md:top-auto md:left-auto md:transform-none">
+        <input type="text" id="search-player" class="border text-black px-4 py-2 sm:text-sm lg:text-base" placeholder="Search Player" onkeyup="filterPlayers(this.value)">
+        <div id="suggestions" class="border bg-white text-black"></div>
+    </div>
 
     <!-- Footer con Shadow -->
     <footer class="text-center text-gray-600 py-4 shadow-xl fade-in">
