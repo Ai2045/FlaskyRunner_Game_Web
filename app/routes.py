@@ -31,8 +31,8 @@ def setup_routes(app):
                 return redirect(url_for('home'))
             else:
                 error["username"] = "Invalid username or password"
-        
-        return render_template('login.html', error=error)
+        message = request.args.get('message')
+        return render_template('login.html', error=error, message=message)
     
     @app.route('/logout')
     def logout():
@@ -56,7 +56,8 @@ def setup_routes(app):
             user = Users(username=username, password=hashed_password)
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for('login'))
+            message = "Registration successful. Please login."
+            return redirect(url_for('login', message=message))
         return render_template('register.html', error=error)
     @app.route('/play_game')
     def play_game():

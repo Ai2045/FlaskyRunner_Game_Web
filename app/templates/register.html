@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Merge TailwindCSS into Flask app</title>
+    <title>Flasky_Game_Web</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
     <style>
         /* Aggiunta di regole CSS custom per animazioni, ombre e sfondi trasparenti */
@@ -20,6 +20,11 @@
 
 
 <body class="min-h-screen bg-gray-900 text-white py-6 flex flex-col justify-center sm:py-12 fade-in">
+    <nav class="absolute top-0 left-0 p-4">
+        <a href="/" class="text-white bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">
+            &#8962; Back to Home
+        </a>
+    </nav>
 <div class="relative py-3 sm:max-w-xl sm:mx-auto">
 <div class="relative px-4 py-10 bg-gray-700 mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
     <div class="max-w-md mx-auto">
@@ -38,20 +43,20 @@
                     <div class="divide-y divide-gray-200">
                         <div class="py-8 text-base leading-6 space-y-4 text-white sm:text-lg sm:leading-7">
                             <div class="flex flex-col"><label class="leading-loose">User Name</label><input type="text"
-                                    name="username" class="p-4 border-2 border-gray-500 rounded-lg" placeholder="Name">
+                                    name="username" class="p-4 border-2 border-gray-500 rounded-lg text-black" placeholder="Name">
                                     {% if error.username %}
                                     <p class="error text-red-500 text-xs italic">{{ error.username }}</p>
                                     {% endif %}
                             </div>
                             <div class="flex flex-col"><label class="leading-loose">Password</label><input
-                                    type="password" name="password" class="p-4 border-2 border-gray-500 rounded-lg"
+                                    type="password" name="password" class="p-4 border-2 border-gray-500 rounded-lg text-black"
                                     placeholder="Password"></div>
                                 {% if error.password %}
                                 <p class="error text-red-500 text-xs italic">{{ error.password }}</p>
                                 {% endif %}
                             <div class="flex flex-col"><label class="leading-loose">Conferma Password</label><input
                                     type="password" name="confirm-password"
-                                    class="p-4 border-2 border-gray-500 rounded-lg" placeholder="Conferma Password">
+                                    class="p-4 border-2 border-gray-500 rounded-lg text-black" placeholder="Conferma Password">
                             </div>
                         </div>
                         <div class="pt-4 flex items-center space-x-4"><button

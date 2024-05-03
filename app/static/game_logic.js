@@ -44,7 +44,8 @@ function updateHighestScore() {
 function draw() {
   if (gameOver) {
     // Darken the background
-    background(0, 0, 0, 200); // 200 alpha for transparency
+    background(0);
+    
 
     
     // Add game over text
@@ -76,11 +77,11 @@ function draw() {
     fill(255); // White color for the current score text
     text("Your Score: " + animatedScore, width / 2, (height / 2) + 150);
   } else {
-        background(100, 100, 100);
+        background(0);
         rectMode(CENTER);
+
         player.draw();
         player.update(); 
-        
         
         
         for (let i = zombies.length - 1; i >= 0; i--) {
@@ -118,6 +119,8 @@ function draw() {
         }
     }
 }
+
+
 
 function saveScore() {
   fetch('/save_score', {
