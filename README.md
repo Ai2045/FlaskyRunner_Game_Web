@@ -21,6 +21,8 @@ Lo sviluppo del gioco segue metodologie agili, utilizzando Git per il versioning
 - **Come utente:** pretendo di ricevere feedback visivi e sonori che rendano il gioco più coinvolgente e gratificante.
 - **Come utente:** voglio essere in grado di visualizzare e confrontare il mio punteggio con quello degli altri giocatori tramite una classifica globale.
 - **Come utente:** se vengo sconfitto, desidero avere l'opportunità di riavviare il gioco per cercare di migliorare il mio punteggio.
+- **Come utente:** voglio poter utilizzare una funzionalità di ricerca che mi permetta di trovare il profilo di altri giocatori, per poter vedere i loro punteggi.
+
 
 ## Documentazione del Codice
 I commenti nel codice forniscono chiarimenti sulle funzioni principali e le logiche implementate. Documentazione aggiuntiva può essere generata utilizzando strumenti standard come JSDoc per JavaScript e Sphinx per Python.
