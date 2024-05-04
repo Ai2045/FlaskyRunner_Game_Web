@@ -31,7 +31,7 @@ I commenti nel codice forniscono chiarimenti sulle funzioni principali e le logi
 Il gioco è stato testato attraverso una serie di test automatici per client e server per garantire che tutte le funzionalità rispondessero secondo le aspettative. Ciò include test unitari, test di integrazione e test end-to-end.
 
 ## Deploy e Manutenzione
-non ancora conclusa
+Deploy su pythonanywhere
 
 ## Conclusioni
 Flask_Shooter_Game_Web combina semplicità di gioco con una solida architettura tecnica, offrendo un'esperienza utente coinvolgente supportata da un backend affidabile e versatile. Dimostra efficacemente il potenziale creativo e di intrattenimento delle tecnologie web moderne.
