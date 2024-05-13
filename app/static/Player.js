@@ -1,10 +1,16 @@
 class Player {
     constructor() {
       this.pos = createVector(width / 2, height / 2)
+      this.imgIdle = loadImage('static/assets/Individual_Animations/Playergun1.png');
+      this.imgFire = loadImage('static/assets/Individual_Animations/Playergun2.png');
+      this.currentImg = this.imgIdle;
       this.angle = 0;
       this.bullets = [];
       this.particles = [];
       this.shoot_sound = loadSound('static/sounds/shoot.wav');
+      this.isShooting = false;
+      this.shootingDuration = 100; // Durata dello stato "fire" in millisecondi.
+      this.lastShotTime = -Infinity; // Per tenere traccia dell'ultimo momento dello sparo.
 
     }
     
@@ -12,15 +18,15 @@ class Player {
       push();
       translate(this.pos.x, this.pos.y);
       rotate(this.angle);
-       // Draw the shadow first
-    fill(50, 50, 50, 100); // choose a darker color for the shadow
-    rect(2, 2, 20, 20); // this will create a shadow offset by 2 pixel in the x/y directions
-
-      fill(255, 255, 255)
-      rect(0, 0, 20, 20);
-      
+      imageMode(CENTER);
+      image(this.currentImg, 0, 0, 100, 100);
       pop();
       
+       // Aggiorna l'img da "fire" a "idle" se è passato abbastanza tempo dallo sparo.
+    if (this.isShooting && millis() - this.lastShotTime > this.shootingDuration) {
+      this.setIdle();
+    }
+
       for (let i = this.particles.length -1; i >= 0; i--) {
         const p = this.particles[i];
       
@@ -34,10 +40,13 @@ class Player {
         p.draw();
       }
       
-      for (let bullet of this.bullets) {
-        bullet.update();
-        bullet.draw();
-      }
+      for (let i = this.bullets.length - 1; i >= 0; i--) {
+        this.bullets[i].update();
+        this.bullets[i].draw();
+        if (this.bullets[i].remove) {
+          this.bullets.splice(i, 1);
+        }
+    }
     }
     
 
@@ -64,6 +73,17 @@ class Player {
       this.createParticles();
     }
 
+  setIdle() {
+    this.currentImg = this.imgIdle;
+    this.isShooting = false;
+  }
+  
+  setFire() {
+    this.currentImg = this.imgFire;
+    this.isShooting = true;
+    this.lastShotTime = millis(); // Memorizza il momento dello sparo.
+  }
+
     createParticles() {
         // Add particle if we've moved
         if (this.oldPos) {
@@ -78,20 +98,27 @@ class Player {
         this.oldPos = this.pos.copy();
       }
     
-    shoot() {
-      this.bullets.push(new Bullet(this.pos.x, this.pos.y, this.angle));
-      this.shoot_sound.play();
-    }
-    
-    hasShot(zombie) {
-      for (let i = 0; i < this.bullets.length; i++) {
-        if (dist(this.bullets[i].x, this.bullets[i].y, zombie.pos.x, zombie.pos.y) < 15) {
-          this.bullets.splice(i, 1);
-          if (zombie.tackDamage()) {
-            return true;
-          }
-        }
+      shoot() {
+        this.bullets.push(new Bullet(this.pos.x, this.pos.y, this.angle));
+        this.shoot_sound.play();
+        this.setFire(); // Imposta l'immagine a "fire" quando si spara.
       }
-      return false;
+
+      hasShot(zombie) {
+        for (let i = this.bullets.length - 1; i >= 0; i--) {
+            let bullet = this.bullets[i];
+            if (dist(bullet.x, bullet.y, zombie.pos.x, zombie.pos.y) < 15) {
+                if (!bullet.hasHit) {
+                    bullet.hasHit = true; // Marca il proiettile come colpito per prevenire ulteriore danno
+                    bullet.beginDissipation(); // Comincia la dissolvenza (se presente)
+                    if (zombie.takeDamage()) {
+                        console.log('Zombie colpito');
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
+
   }

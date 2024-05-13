@@ -81,22 +81,16 @@ function draw() {
         rectMode(CENTER);
 
         player.draw();
-        player.update(); 
-        
+        player.update();
         
         for (let i = zombies.length - 1; i >= 0; i--) {
             zombies[i].draw();
             zombies[i].update();
             
-            if (zombies[i].ateYou()) {
-            endGame();
-            break;
+            if (zombies[i].state !== 'dead' && player.hasShot(zombies[i])) {
+              score++;
             }
-            
-            if (player.hasShot(zombies[i])) {
-            score++;
-            zombies.splice(i, 1);
-            }
+
         }
         
         if (frame >= zombieSpawnTime) {
@@ -119,7 +113,6 @@ function draw() {
         }
     }
 }
-
 
 
 function saveScore() {
