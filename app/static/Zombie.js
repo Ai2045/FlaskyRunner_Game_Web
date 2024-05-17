@@ -16,6 +16,8 @@ class Zombie {
       
       let x = random(-300, width + 300);
       this.pos = createVector(x, y);
+      this.w = 40;
+      this.h = 40;
       this.state = 'running';
       this.deathTime = 0; // Il tempo della morte è inizialmente 0
       this.isDestroyed = false;  // Flag che indica se il mostro è stato distrutto
@@ -60,7 +62,7 @@ class Zombie {
               currentAnimationFrames = this.animation_attack;
               break;
           case 'dead':
-              image(this.img_dead, 0, 0, 40, 40);
+              image(this.img_dead, 0, 0, this.w, this.h);
               pop(); // Non dimenticare di chiamare pop() prima di return se non continui a disegnare.
               return;
           default:
@@ -127,4 +129,22 @@ class Zombie {
       this.state = 'attacking';
       return dist(this.pos.x, this.pos.y, player.pos.x, player.pos.y) < (20 + player.radius);
     }
+
+    handleCollision(wall) {
+       // Calcola la direzione in cui lo zombie si sta muovendo
+  let movementDirection = p5.Vector.sub(player.pos, this.pos);
+  movementDirection.normalize();
+  
+  // Considera il centro del muro e calcola la normale alla superficie al punto di collisione
+  let wallNormal = p5.Vector.sub(this.pos, createVector(wall.x + wall.w / 2, wall.y + wall.h / 2)).normalize();
+  
+  // Riflette la direzione di movimento dello zombie utilizzando la normale del muro
+  // La riflessione è calcolata come: vettore_riflesso = dir - 2 * (dir · norm) * norm
+  let dotProduct = movementDirection.dot(wallNormal);
+  let reflection = p5.Vector.sub(movementDirection, wallNormal.mult(2 * dotProduct));
+  
+  // Imposta la nuova direzione di movimento allo zombie post-collisione
+  this.pos.add(reflection);
+
+  }
   }

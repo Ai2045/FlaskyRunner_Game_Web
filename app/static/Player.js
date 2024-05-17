@@ -1,6 +1,8 @@
 class Player {
-    constructor() {
-      this.pos = createVector(width / 2, height / 2)
+    constructor(posX, posY) {
+      this.pos = createVector(posX, posY);
+      this.w = 30;
+      this.h = 30;
       this.imgIdle = loadImage('static/assets/Individual_Animations/Playergun1.png');
       this.imgFire = loadImage('static/assets/Individual_Animations/Playergun2.png');
       this.currentImg = this.imgIdle;
@@ -8,10 +10,15 @@ class Player {
       this.bullets = [];
       this.particles = [];
       this.shoot_sound = loadSound('static/sounds/shoot.wav');
+      this.bullet_empty_sound = loadSound('static/sounds/bullet_empty.mp3');
+      this.reload_sound = loadSound('static/sounds/reload.mp3');
       this.isShooting = false;
       this.shootingDuration = 100; // Durata dello stato "fire" in millisecondi.
       this.lastShotTime = -Infinity; // Per tenere traccia dell'ultimo momento dello sparo.
-
+      this.magazineSize = 10; // Numero di proiettili per caricatore
+      this.currentAmmo = this.magazineSize; // Munizioni attuali
+      this.reloadTime = 2000; // Tempo di ricarica in millisecondi
+      this.isReloading = false;
     }
     
     draw() {
@@ -47,6 +54,16 @@ class Player {
           this.bullets.splice(i, 1);
         }
     }
+    if (this.currentAmmo <= 3) {
+      fill(255, 0, 0); // Imposta il colore del testo a rosso (RGB) per le munizioni basse
+    }else {
+      fill(255); // Imposta il colore del testo a bianco per le munizioni normali
+    }
+    text(`Munizioni: ${this.currentAmmo} / ${this.magazineSize}`, width -150 , 50);
+    if (this.isReloading) {
+      fill(0, 255, 0); // Imposta il colore del testo a verde (RGB) per la ricarica
+      text('Ricarica...', width -100, 90);
+    }
     }
     
 
@@ -68,9 +85,25 @@ class Player {
       if (keyIsDown(83)) {
         ySpeed = 2;
       }
+
+      if (keyIsDown(82)) { // 82 è il codice per il tasto "R"
+        this.reload();
+      }
+
       this.pos.add(xSpeed, ySpeed);
       this.angle = atan2(mouseY - this.pos.y, mouseX - this.pos.x); // add this
       this.createParticles();
+    }
+
+    reload() {
+      if (this.currentAmmo < this.magazineSize && !this.isReloading) {
+        this.isReloading = true;
+        setTimeout(() => {
+          this.currentAmmo = this.magazineSize;
+          this.isReloading = false;
+          this.reload_sound.play();
+        }, this.reloadTime);
+      }
     }
 
   setIdle() {
@@ -98,11 +131,21 @@ class Player {
         this.oldPos = this.pos.copy();
       }
     
-      shoot() {
-        this.bullets.push(new Bullet(this.pos.x, this.pos.y, this.angle));
-        this.shoot_sound.play();
-        this.setFire(); // Imposta l'immagine a "fire" quando si spara.
-      }
+shoot() {
+  if (this.currentAmmo > 0 && !this.isReloading) {
+    // ... creazione del proiettile
+    let bullet = new Bullet(this.pos.x, this.pos.y, this.angle);
+    this.bullets.push(bullet);
+    this.shoot_sound.play();
+
+    this.setFire();
+    this.currentAmmo--;
+  } else if (this.currentAmmo === 0) {
+    // Suono di "mancanza di munizioni" se tenti di sparare senza munizioni
+    this.bullet_empty_sound.play();
+    this.reload(); // Inizia automaticamente la ricarica se non ci sono munizioni
+  }
+}
 
       hasShot(zombie) {
         for (let i = this.bullets.length - 1; i >= 0; i--) {
@@ -121,4 +164,34 @@ class Player {
         return false;
     }
 
+    hasCollided(zombie) {
+        return dist(this.pos.x, this.pos.y, zombie.pos.x, zombie.pos.y) < 20;
+    }
+
+    handleCollision(wall) {
+      //impedi ulteriori movimenti in quella direzione, ecc.
+      let xSpeed = 0;
+      let ySpeed = 0;
+      if (keyIsDown(65)) {
+        xSpeed = 2;
+      }
+      
+      if (keyIsDown(68)) {
+        xSpeed = -2;
+      }
+
+      if (keyIsDown(87)) {
+        ySpeed = 2;
+      }
+
+      if (keyIsDown(83)) {
+        ySpeed = -2;
+      }
+
+      this.pos.add(xSpeed, ySpeed);
+
+      // Inoltre, potresti voler ripristinare la posizione precedente
+      this.oldPos = this.pos.copy();
+      
+    }
   }
