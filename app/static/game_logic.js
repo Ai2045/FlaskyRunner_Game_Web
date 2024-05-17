@@ -84,9 +84,7 @@ function draw() {
   if (gameOver) {
     // Darken the background
     background(0);
-    
-
-    
+  
     // Add game over text
     textSize(72);
     fill(255, 0, 0); // Bright red color for contrast
@@ -193,7 +191,7 @@ function endGame() {
   
 }
 function restart() {
-  player = new Player();
+  player = new Player(playerStartX, playerStartY);
   zombies = [];
   zombieSpawnTime = 300;
   zombieMaxSpeed = 2;
